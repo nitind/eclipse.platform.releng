@@ -20,8 +20,6 @@ import org.eclipse.team.core.TeamException;
 import org.eclipse.team.internal.ccvs.core.CVSTag;
 import org.eclipse.team.internal.ccvs.core.CVSTeamProvider;
 import org.eclipse.team.internal.ccvs.core.client.Command;
-import org.eclipse.team.internal.ccvs.core.client.Commit;
-import org.eclipse.team.internal.ccvs.core.client.Command.LocalOption;
 import org.eclipse.team.internal.ccvs.ui.operations.CommitOperation;
 import org.eclipse.team.internal.ccvs.ui.operations.RepositoryProviderOperation;
 
@@ -124,12 +122,9 @@ public class MapProject implements IResourceChangeListener {
 		}
 	}
 	
-	public void commitMapProject(String comment, IProgressMonitor  monitor) throws CoreException{
-		List localOptions = new ArrayList();
-		localOptions.add(Commit.makeArgumentOption(Command.MESSAGE_OPTION, comment));
-		LocalOption[] commandOptions = (LocalOption[])localOptions.toArray(new LocalOption[localOptions.size()]);
+	public void commitMapProject(String comment, IProgressMonitor  monitor) throws CoreException{;
 		try {
-			new CommitOperation(null, RepositoryProviderOperation.asResourceMappers(new IResource[] { project }), commandOptions).run(monitor);
+			new CommitOperation(null, RepositoryProviderOperation.asResourceMappers(new IResource[] { project }), new Command.LocalOption[0], comment).run(monitor);
 		} catch (InvocationTargetException e) {
 			throw TeamException.asTeamException(e);
 		} catch (InterruptedException e) {
