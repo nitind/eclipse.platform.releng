@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.platform.source"
       label="%featureName"
-      version="2.1.0"
+      version="3.0.0"
       image= "eclipse_update_120.jpg"
       provider-name="%providerName">
 
@@ -21,7 +21,7 @@
       </update>
    </url>
 
-   <plugin id="org.eclipse.platform.doc.isv" version="2.1.0" />
-   <plugin id="org.eclipse.platform.source" version="2.1.0" />
+   <plugin id="org.eclipse.platform.doc.isv" version="0.0.0" />
+   <plugin id="org.eclipse.platform.source" version="0.0.0" />
 
 </feature>
