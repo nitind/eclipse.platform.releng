@@ -25,7 +25,14 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
+   <plugin
+         id="org.eclipse.core.jobs"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
    <plugin
          id="org.eclipse.core.expressions"
          download-size="0"
@@ -187,8 +194,8 @@
          version="0.0.0"
          fragment="true"
          unpack="false"/>
-         
-  <plugin
+
+   <plugin
          id="org.eclipse.swt.gtk.linux.ia64"
          os="linux"
          ws="gtk"
@@ -220,9 +227,8 @@
          version="0.0.0"
          fragment="true"
          unpack="false"/>
-         
-         
-         <plugin
+
+   <plugin
          id="org.eclipse.swt.motif.hpux.ia64_32"
          os="hpux"
          ws="motif"
@@ -237,9 +243,42 @@
          id="org.eclipse.rcp"
          download-size="0"
          install-size="0"
-         version="0.0.0"      
+         version="0.0.0"
          unpack="false"/>
-         
-         
+
+   <plugin
+         id="org.eclipse.core.contenttype"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.preferences"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.registry"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.supplement"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
