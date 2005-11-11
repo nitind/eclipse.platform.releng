@@ -2,9 +2,10 @@
 <feature
       id="org.eclipse.rcp"
       label="%featureName"
-      version="3.0.0"
-      image="eclipse_update_120.jpg"
-      provider-name="%providerName">
+      version="3.1.0.qualifier"
+      provider-name="%providerName"
+      plugin="org.eclipse.rcp"
+      image="eclipse_update_120.jpg">
 
    <description>
       %description
@@ -19,85 +20,226 @@
    </url>
 
    <plugin
+         id="org.eclipse.core.commands"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.core.expressions"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.core.runtime"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
-         
+         version="0.0.0"
+         unpack="false"/>
+
    <plugin
          id="org.eclipse.osgi"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.osgi.services"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.help"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.swt"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.jface"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.ui"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.ui.workbench"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
-  <!-- Win32 -->
-  <plugin id="org.eclipse.swt.win32" download-size="0" install-size="0" version="0.0.0" fragment="true" ws="win32"/>
+   <plugin
+         id="org.eclipse.update.configurator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
-  <!-- LINUX GTK -->  
-  <plugin id="org.eclipse.swt.gtk" download-size="0" install-size="0" version="0.0.0"  fragment="true" os="linux" ws="gtk"/>
+   <plugin
+         id="org.eclipse.swt.win32.win32.x86"
+         os="win32"
+         ws="win32"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
 
-  <!-- LINUX GTK AMD64-->
-  <plugin id="org.eclipse.swt.gtk64" download-size="0" install-size="0" version="0.0.0"  fragment="true" os="linux" ws="gtk" arch="amd64" />
+   <plugin
+         id="org.eclipse.swt.gtk.linux.x86"
+         os="linux"
+         ws="gtk"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
 
-  <!-- MacOS X Carbon -->  
-  <plugin id="org.eclipse.swt.carbon" download-size="0" install-size="0" version="0.0.0"  fragment="true" os="macosx" ws="carbon"/> 
-  
-  <!-- AIX Motif -->
-  <plugin id="org.eclipse.swt.motif" download-size="0" install-size="0" version="0.0.0" fragment="true" os="aix" ws="motif"/>
-  
-  <!-- HPUX Motif -->
-  <plugin id="org.eclipse.swt.motif" download-size="0" install-size="0" version="0.0.0" fragment="true" os="hpux" ws="motif"/>
+   <plugin
+         id="org.eclipse.swt.gtk.solaris.sparc"
+         os="solaris"
+         ws="gtk"
+         arch="sparc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
 
-  <!-- LINUX Motif -->    
-  <plugin id="org.eclipse.swt.motif" download-size="0" install-size="0" version="0.0.0" fragment="true" os="linux" ws="motif"/>
+   <plugin
+         id="org.eclipse.swt.gtk.linux.ppc"
+         os="linux"
+         ws="gtk"
+         arch="ppc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
 
-  <!-- Solaris Motif -->
-  <plugin id="org.eclipse.swt.motif" download-size="0" install-size="0" version="0.0.0" fragment="true" os="solaris" ws="motif"/>
-  
-  <!-- QNX Photon -->
-  <plugin id="org.eclipse.swt.photon" download-size="0" install-size="0" version="0.0.0" fragment="true" os="qnx" ws="photon"/>
-  
+   <plugin
+         id="org.eclipse.swt.gtk.linux.x86_64"
+         os="linux"
+         ws="gtk"
+         arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.carbon.macosx.ppc"
+         os="macosx"
+         ws="carbon"
+         arch="ppc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.motif.aix.ppc"
+         os="aix"
+         ws="motif"
+         arch="ppc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.motif.hpux.PA_RISC"
+         os="hpux"
+         ws="motif"
+         arch="PA_RISC"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.motif.linux.x86"
+         os="linux"
+         ws="motif"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+         
+  <plugin
+         id="org.eclipse.swt.gtk.linux.ia64"
+         os="linux"
+         ws="gtk"
+         arch="ia64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.motif.solaris.sparc"
+         os="solaris"
+         ws="motif"
+         arch="sparc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.swt.photon.qnx.x86"
+         os="qnx"
+         ws="photon"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+         
+         
+         <plugin
+         id="org.eclipse.swt.motif.hpux.ia64_32"
+         os="hpux"
+         ws="motif"
+         arch="ia64_32"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.rcp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"      
+         unpack="false"/>
+         
+         
+
 </feature>
-
