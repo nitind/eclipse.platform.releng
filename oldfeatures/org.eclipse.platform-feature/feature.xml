@@ -104,13 +104,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.runtime.compatibility.registry"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.osgi.services"
          download-size="0"
          install-size="0"
@@ -498,6 +491,21 @@
    <plugin
          id="org.eclipse.update.core.win32"
          os="win32"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ui.views.properties.tabbed"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.core.runtime.compatibility.registry"
          download-size="0"
          install-size="0"
          version="0.0.0"
