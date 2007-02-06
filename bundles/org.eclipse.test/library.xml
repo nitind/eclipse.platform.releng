@@ -88,7 +88,7 @@
 
 		<!--save .log content-->
 		<concat destfile="${junit-report-output}/${classname}.log.txt">
-			<fileset dir="${data-dir}" includes=".metadata/*.log"/>
+			<fileset dir="${eclipse-home}" includes="${data-dir}/.metadata/*.log"/>
 		</concat>
 	</target>
 
