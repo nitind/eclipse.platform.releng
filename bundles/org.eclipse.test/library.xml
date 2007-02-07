@@ -91,10 +91,10 @@
 		</concat>
 		
 		<!--Update file with name of test class and availability of JUnit results-->
-		<condition property="resultsCollected" value="no">
-			<length file="${test-output}" when="greater" length="0" />
+		<condition property="resultsCollected" value="error">
+			<length file="${test-output}" when="equal" length="0" />
 		</condition>
-		<property name="resultsCollected" value="yes" />
+		<property name="resultsCollected" value="ok" />
 		<echo message="${classname}=${resultsCollected}" append="true" file="${junit-report-output}/testlist.txt"/>
 	</target>
 
