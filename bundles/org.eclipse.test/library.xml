@@ -46,10 +46,8 @@
 		<!--
 			vm selection priority:
 			1.  user-specified java executable via outer Ant property setting of "jvm".
-			2.  javaw if available in running vm.  Used to avoid console window interference with UI tests on Windows.
-			3.  java executable on path.
+			2.  java executable on path.
 		-->
-		<available resource="javaw" property="jvm" value="${java.home}/bin/javaw" />
 		<condition property="test-vm" value="-vm ${jvm}">
 			<isset property="jvm" />
 		</condition>
@@ -65,6 +63,7 @@
 			<arg line="-testPluginName ${plugin-name}"/>
 			<arg line="-className ${classname}"/>
 			<arg line="-nosplash"/>
+			<arg line="-suppressErrors"/>
 			<arg line="-vmargs ${vmargs} ${extraVMargs} -DPLUGIN_PATH=${plugin-path}"/>
 		</exec>
 
