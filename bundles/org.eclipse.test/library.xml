@@ -91,7 +91,7 @@
 			<fileset dir="${eclipse-home}" includes="${data-dir}/.metadata/*.log"/>
 		</concat>
 		
-		<!--Add test class to test registry.  Used to determine which failed before producing JUnit report.-->
+		<!--Update file with name of test class and availability of JUnit results-->
 		<condition property="resultsCollected" value="no">
 			<length file="${test-output}" when="greater" length="0" />
 		</condition>
