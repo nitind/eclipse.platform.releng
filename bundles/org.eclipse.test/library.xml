@@ -72,7 +72,7 @@
 	</target>
 	
 	<target name="collect-results">
-
+		<property name="testListing" value="${junit-report-output}/testlist.txt"/>
 		<mkdir dir="${junit-report-output}" />
 		<junitreport todir="${junit-report-output}" tofile="${classname}.xml">
 			<fileset dir="${eclipse-home}">
@@ -90,22 +90,18 @@
 			<fileset dir="${eclipse-home}" includes="${data-dir}/.metadata/*.log"/>
 		</concat>
 		
-		<!--Update file with name of test class and availability of JUnit results-->
+		<!--Create test manifest with test class name, availability of JUnit results, vm information-->
 		<condition property="resultsCollected" value="error">
 			<length file="${test-output}" when="equal" length="0" />
 		</condition>
 		<property name="resultsCollected" value="ok" />
-		<echo message="${classname}=${resultsCollected}" append="true" file="${junit-report-output}/testlist.txt"/>
+		
+		<echo message="${classname}=${resultsCollected}" append="true" file="${testListing}"/>
 	</target>
 
-	<!--*********************************************************
-	 		ALL TARGETS BELOW ARE DEPRECATED 
-	 *********************************************************-->
-	
 	<target name="collect">
 		<!--
-			Results are now automatically collected at the end of the test run.  This target can be used to 
-			aggragate test runs from multiple test suites into a single report.
+			This target can be used to aggragate test runs from multiple test suites into a single report.
 		
 			Parameters to this target:
 			includes		- the names of the files to include
