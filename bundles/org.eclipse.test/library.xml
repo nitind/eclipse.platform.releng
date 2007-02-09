@@ -53,6 +53,9 @@
 		</condition>
 		<property name="test-vm" value="" />
 		
+		<!--ensure executable has execute permission-->
+		<chmod file="${eclipse-home}/eclipse" perm="ugo+rx"/>
+		
 		<echo message="Running ${classname}"/>
 
 		<exec executable="${eclipse-home}/eclipse" dir="${eclipse-home}" timeout="${timeout}" logError="true" failonerror="false" output="${junit-report-output}/${classname}.txt">
