@@ -56,7 +56,10 @@
 		<!--ensure executable has execute permission-->
 		<chmod file="${eclipse-home}/eclipse" perm="ugo+rx"/>
 		
-		<echo message="Running ${classname}"/>
+		<!-- ensure junit report dir exists -->
+		<mkdir dir="${junit-report-output}"/>
+		
+		<echo message="Running ${classname}. Results will be in ${junit-report-output}/${classname}.txt."/>
 
 		<exec executable="${eclipse-home}/eclipse" dir="${eclipse-home}" timeout="${timeout}" logError="true" failonerror="false" output="${junit-report-output}/${classname}.txt">
 			<arg line="-data ${data-dir}"/>
