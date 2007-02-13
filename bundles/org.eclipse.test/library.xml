@@ -37,7 +37,14 @@
 			<equals arg1="${test.target}" arg2="performance" />
 		</condition>
 		<property name="vmargs" value="" />
+		
+		<!--use -consolelog if launching a headless test-->
+		<condition property="consolelog" value="-consolelog">
+			<equals arg1="${application}" arg2="org.eclipse.test.coretestapplication"/>
+		</condition>
+		<property name="consolelog" value="" />
 
+		
 		<property name="formatter" value="org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter"/>
 		<property name="extraVMargs" value=""/>
 		<property name="launcherArgs" value=""/>
@@ -73,7 +80,7 @@
 			<arg line="-className ${classname}"/>
 			<arg line="-nosplash"/>
 			<arg line="-suppressErrors"/>
-			<arg line="${launcherArgs}"/>
+			<arg line="${consolelog}"/>
 			<arg line="-vmargs ${vmargs} ${extraVMargs} -DPLUGIN_PATH=${plugin-path}"/>
 		</exec>
 
