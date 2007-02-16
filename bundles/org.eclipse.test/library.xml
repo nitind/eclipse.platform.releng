@@ -89,7 +89,7 @@
 	</target>
 	
 	<target name="eclipse-test" description="Runs the specified classname as a plug-in test.">		
-		<property name="vmargs" value="" />
+		<property name="vmargs" value="-Xms256m -Xmx512m"/>
 		
 		<!--use -consolelog if launching a headless test-->
 		<condition property="consolelog" value="-consolelog">
