@@ -105,6 +105,14 @@ public class RelEngPlugin extends AbstractUIPlugin {
 	}
 	
 	/**
+	 * Log the given exception as an error
+	 * @param e exception to log
+	 */
+	public static void log(Throwable e){
+		log(new Status(IStatus.ERROR, ID, 0, e.getMessage(), e));
+	}
+	
+	/**
 	 * Log the given status. Do not use this method for the IStatus from a CoreException.
 	 * Use<code>log(CoreException)</code> instead so the stack trace is not lost.
 	 */

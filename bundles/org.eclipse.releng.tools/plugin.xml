@@ -129,6 +129,11 @@
             name="Releng Map Project Selection"
             category="org.eclipse.team.ui.TeamPreferences">
       </page>
+      <page
+            class="org.eclipse.releng.tools.preferences.PomVersionPreferencePage"
+            id="org.eclipse.releng.tools.preferences.PomVersionPreferencePage"
+            name="POM Version Tool">
+      </page>
    </extension>
 	
 
@@ -152,6 +157,37 @@
              type="org.eclipse.releng.tools.IRepositoryProviderCopyrightAdapterFactory">
        </adapter>
     </factory>
+ </extension>
+<extension id="org.eclipse.releng.tools.pomVersionProblem" point="org.eclipse.core.resources.markers" name="POM Version Problem">
+  <super  type="org.eclipse.core.resources.problemmarker"/>
+  <super type="org.eclipse.core.resources.textmarker"/>
+  <persistent value="true"/>
+</extension>
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+    <markerTypeCategory
+          name="POM Version Problems">
+       <markerTypeReference
+             id="org.eclipse.releng.tools.pomVersionProblem">
+       </markerTypeReference>
+    </markerTypeCategory>
+ </extension>
+ <extension
+       point="org.eclipse.ui.ide.markerResolution">
+    <markerResolutionGenerator
+          class="org.eclipse.releng.tools.pomversion.PomVersionResolutionGenerator"
+          markerType="org.eclipse.releng.tools.pomVersionProblem">
+    </markerResolutionGenerator>
+ </extension>
+ <extension
+       id="PomVersionBuilder"
+       name="Pom Version Tool"
+       point="org.eclipse.core.resources.builders">
+    <builder>
+       <run
+             class="org.eclipse.releng.tools.pomversion.PomVersionBuilder">
+       </run>
+    </builder>
  </extension>
 
 </plugin>

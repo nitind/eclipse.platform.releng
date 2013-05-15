@@ -12,12 +12,11 @@ package org.eclipse.releng.tools.preferences;
 
 import java.util.Calendar;
 
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.releng.tools.Messages;
 import org.eclipse.releng.tools.RelEngPlugin;
-
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.releng.tools.pomversion.IPomVersionConstants;
 
 /**
  * Initializes default preferences for release engineering tool
@@ -40,6 +39,8 @@ public class RelEngPreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY, false);
         store.setDefault(RelEngCopyrightConstants.IGNORE_PROPERTIES_KEY, false);
         store.setDefault(RelEngCopyrightConstants.IGNORE_XML_KEY, false);
+        
+        store.setDefault(IPomVersionConstants.POM_VERSION_ERROR_LEVEL, IPomVersionConstants.VALUE_ERROR);
 	}
 
 }
