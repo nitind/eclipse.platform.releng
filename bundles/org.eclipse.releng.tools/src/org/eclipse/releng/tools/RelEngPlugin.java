@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2012 IBM Corporation and others.
+ * Copyright (c) 2000, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,14 +14,21 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.releng.tools.pomversion.IPomVersionConstants;
+import org.eclipse.releng.tools.pomversion.PomVersionErrorReporter;
 import org.eclipse.team.core.RepositoryProvider;
+import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
 
 /**
@@ -32,13 +39,14 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  *    <li>Builder and associated project nature
  *    <li>Fix Copyright action
  */
-public class RelEngPlugin extends AbstractUIPlugin {
+public class RelEngPlugin extends AbstractUIPlugin implements IStartup {
 	
 	public static final String ID = "org.eclipse.releng.tools"; //$NON-NLS-1$
 	public static final String MAP_PROJECT_NAME = Messages.getString("RelEngPlugin.1"); //$NON-NLS-1$
 	public static final String MAP_FOLDER = Messages.getString("RelEngPlugin.2"); //$NON-NLS-1$
 	private static final String BINARY_REPOSITORY_PROVIDER_CLASS_NAME= "org.eclipse.pde.internal.core.BinaryRepositoryProvider"; //$NON-NLS-1$
 
+	PomVersionErrorReporter fPomReporter = new PomVersionErrorReporter();
 	
 	//The shared instance.
 	private static RelEngPlugin plugin;
@@ -57,6 +65,33 @@ public class RelEngPlugin extends AbstractUIPlugin {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(ID);
+		if(node != null) {
+			node.addPreferenceChangeListener(fPomReporter);
+			String severity = getPreferenceStore().getString(IPomVersionConstants.POM_VERSION_ERROR_LEVEL);
+			if(!IPomVersionConstants.VALUE_IGNORE.equals(severity)) {
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(fPomReporter, IResourceChangeEvent.POST_BUILD);
+			}
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(ID);
+		if(node != null) {
+			node.removePreferenceChangeListener(fPomReporter);
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(fPomReporter);
+		}
+		super.stop(context);
+	}
+	
 	/**
 	 * Returns the shared instance.
 	 */
@@ -153,6 +188,12 @@ public class RelEngPlugin extends AbstractUIPlugin {
 		// Check for PDE's binary projects that also connect a provider to the project
 		RepositoryProvider provider= RepositoryProvider.getProvider(project);
 		return provider != null && !BINARY_REPOSITORY_PROVIDER_CLASS_NAME.equals(provider.getClass().getName());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IStartup#earlyStartup()
+	 */
+	public void earlyStartup() {
 	}
 
 	/**

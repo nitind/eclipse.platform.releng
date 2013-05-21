@@ -185,9 +185,9 @@ public class PomErrorLevelBlock extends ConfigurationBlock {
 	 * Constant representing the severity values presented in the combo boxes for each option
 	 */
 	private static final String[] SEVERITIES_LABELS = {
-		"Error",
-		"Warning",
-		"Ignore"
+		"Error", //$NON-NLS-1$
+		"Warning", //$NON-NLS-1$
+		"Ignore" //$NON-NLS-1$
 	};
 	
 	/**
@@ -275,7 +275,7 @@ public class PomErrorLevelBlock extends ConfigurationBlock {
 		fMainComp.setLayout(gl);
 		fMainComp.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false));
 		fMainComp.setFont(parent.getFont());
-		this.fCombo = createComboControl(fMainComp, "Mismatched plug-in and pom.xml version numbers", KEY_POM_VERSION_ERROR_LEVEL);
+		this.fCombo = createComboControl(fMainComp, Messages.PomErrorLevelBlock_mismatched_pom_versions_pref, KEY_POM_VERSION_ERROR_LEVEL);
 		Dialog.applyDialogFont(fMainComp);
 		return fMainComp;
 	}

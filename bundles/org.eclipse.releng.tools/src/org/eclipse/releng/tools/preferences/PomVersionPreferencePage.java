@@ -51,7 +51,7 @@ public class PomVersionPreferencePage extends PreferencePage implements
 		GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 		gd.widthHint = 400;
 		label.setLayoutData(gd);
-		label.setText("The POM Version tool will compare the artifact version in a pom.xml file at the root of the project to the plug-in version in the manifest. If the two versions do not match a problem marker will be created. The severity of this problem can be configured on this page.");
+		label.setText(Messages.PomVersionPreferencePage_pom_pref_message);
 		label.setFont(comp.getFont());
 		
 		block = new PomErrorLevelBlock((IWorkbenchPreferenceContainer)getContainer());
