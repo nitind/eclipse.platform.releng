@@ -1,0 +1,6 @@
+This project was to provide test for Tycho. 
+
+I created a branch named david_williams/releng.bug460487 
+
+so I could "save it away", before deleting from master. 
+
