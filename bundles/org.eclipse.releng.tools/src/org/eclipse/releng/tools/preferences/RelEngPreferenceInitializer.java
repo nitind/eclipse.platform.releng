@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2013 IBM Corporation and others.
+ * Copyright (c) 2004, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -42,6 +42,7 @@ public class RelEngPreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(RelEngCopyrightConstants.IGNORE_XML_KEY, false);
 
         store.setDefault(IPomVersionConstants.POM_VERSION_ERROR_LEVEL, IPomVersionConstants.VALUE_ERROR);
+        store.setDefault(RelEngCopyrightConstants.EPL_VERSION, false);
 	}
 
 }

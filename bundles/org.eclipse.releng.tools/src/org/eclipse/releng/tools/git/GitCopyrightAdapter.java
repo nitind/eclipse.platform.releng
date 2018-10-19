@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2012 AGETO Service GmbH and others.
+ * Copyright (c) 2010, 2018 AGETO Service GmbH and others.
  * All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -25,24 +25,34 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.egit.core.project.RepositoryMapping;
+import org.eclipse.jgit.diff.DiffConfig;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.FollowFilter;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
-import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.releng.tools.RelEngPlugin;
 import org.eclipse.releng.tools.RepositoryProviderCopyrightAdapter;
 
 public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 
+	/* filter files if the most recent commit contains this string */
 	private static String filterString = "copyright"; // lowercase //$NON-NLS-1$
+
+	/* continue to the next commit if the current one starts with one of the following strings */
+	private static String[] skipOnMessages = new String[] {"move bundles"}; //$NON-NLS-1$
 
 	public GitCopyrightAdapter(IResource[] resources) {
 		super(resources);
+	}
+
+	private boolean startsWithAnyOf(String test, String[] candidates) {
+		for (int i = 0; i < candidates.length; i++) {
+			if (test.startsWith(candidates[i])) return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -55,21 +65,24 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 			if (mapping != null) {
 				final Repository repo = mapping.getRepository();
 				if (repo != null) {
-					RevWalk walk = null;
-					try {
-						final ObjectId start = repo.resolve(Constants.HEAD);
-						walk = new RevWalk(repo);
-						walk.setTreeFilter(AndTreeFilter.create(PathFilter
-								.create(mapping.getRepoRelativePath(file)),
-								TreeFilter.ANY_DIFF));
+					try (RevWalk walk = new RevWalk(repo)) {
+						ObjectId start = repo.resolve(Constants.HEAD);
+						walk.setTreeFilter(FollowFilter.create(mapping.getRepoRelativePath(file),
+								repo.getConfig().get(DiffConfig.KEY)));
 						walk.markStart(walk.lookupCommit(start));
-						final RevCommit commit = walk.next();
+						RevCommit commit = walk.next();
 						if (commit != null) {
-							if (filterString != null
-									&& commit.getFullMessage().toLowerCase()
-											.indexOf(filterString) != -1) {
-								// the last update was a copyright check in - ignore
-								return 0;
+							if (commit.getFullMessage().toLowerCase().contains(filterString)) {
+								commit = walk.next();
+								if (commit == null) {
+									return 0;
+								}
+							}
+							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), skipOnMessages)) {
+								commit = walk.next();
+								if (commit == null) {
+									return 0;
+								}
 							}
 
 							boolean isSWT= file.getProject().getName().startsWith("org.eclipse.swt"); //$NON-NLS-1$
@@ -98,8 +111,6 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 										"An error occured when processing {0}",
 										file.getName()), e));
 					} finally {
-						if (walk != null)
-							walk.close();
 					}
 				}
 			}

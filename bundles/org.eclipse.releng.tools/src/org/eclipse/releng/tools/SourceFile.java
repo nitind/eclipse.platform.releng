@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -52,7 +52,7 @@ public abstract class SourceFile {
         String extension = file.getFileExtension();
         if (extension != null) {
 	        extension = extension.toLowerCase();
-			if (extension.equals("java")) { //$NON-NLS-1$
+			if (extension.equals("java") || extension.toLowerCase().equals("jflex")) { //$NON-NLS-1$ //$NON-NLS-2$
 				return new JavaFile(file);
 	        } else if (extension.equals("c") || extension.equals("h") || extension.equals("rc") || extension.equals("cc") || extension.equals("cpp")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	            return new CFile(file);
@@ -65,8 +65,10 @@ public abstract class SourceFile {
 			} else if (extension.equals("js")) { //$NON-NLS-1$
 	            return new JavaScriptFile(file);
 			} else if (extension.equals("xml")) { //$NON-NLS-1$
-		    //[276257] re-enable xml support.
-		    return new XmlFile(file);
+			    //[276257] re-enable xml support.
+			    return new XmlFile(file);
+			} else if (extension.equals("exsd")) { //$NON-NLS-1$
+			    return new ExsdFile(file);
 			}
         }
 		return null;
@@ -237,6 +239,9 @@ public abstract class SourceFile {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (UnsupportedOperationException e) {
+			System.err.println("UnsupportedOperationException with " + file.getFullPath()); //$NON-NLS-1$
+			e.printStackTrace(System.err);
 		} finally {
 		    closeFileBuffer();
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2016 IBM Corporation and others.
+ * Copyright (c) 2004, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -59,6 +59,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 //	private Button fFixExisting;
 	private Button fIgnoreProperties;
 	private Button fIgnoreXml;
+	private Button fUpdateLicenseVersion;
 	
 	@Override
 	public void init(IWorkbench workbench) {
@@ -137,6 +138,12 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		data.horizontalSpan = 2;
 		fIgnoreXml.setLayoutData(data);
 
+		fUpdateLicenseVersion = new Button(fComposite, SWT.CHECK);
+		fUpdateLicenseVersion.setText(Messages.getString("CopyrightPreferencePage.10")); //$NON-NLS-1$
+		data = new GridData();
+		data.horizontalSpan = 2;
+		fUpdateLicenseVersion.setLayoutData(data);
+
 
 		KeyListener listener1 = new KeyAdapter() {
 			@Override
@@ -211,6 +218,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		fRevisionYear.setText(store.getString(RelEngCopyrightConstants.REVISION_YEAR_KEY));
 		fUseDefaultRevisionYear.setSelection(store.getBoolean(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY));
 		fReplaceAllExisting.setSelection(store.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY));
+		fUpdateLicenseVersion.setSelection(store.getBoolean(RelEngCopyrightConstants.EPL_VERSION));
 		// disable fix up existing copyright till it works better
 //		handleReplaceAllEnabled(fReplaceAllExisting.getSelection(), store.getBoolean(RelEngCopyrightConstants.FIX_UP_EXISTING_KEY));
 		fIgnoreProperties.setSelection(store.getBoolean(RelEngCopyrightConstants.IGNORE_PROPERTIES_KEY));
@@ -263,7 +271,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		// disable fix up existing copyright till it works better
 //		handleReplaceAllEnabled(fReplaceAllExisting.getSelection(), getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.FIX_UP_EXISTING_KEY));
 		fIgnoreProperties.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.IGNORE_PROPERTIES_KEY));
-		
+		fUpdateLicenseVersion.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.EPL_VERSION));
 		//[276257] re-enabling xml files
 		fIgnoreXml.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.IGNORE_XML_KEY));
 		
@@ -279,6 +287,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		store.setValue(RelEngCopyrightConstants.REVISION_YEAR_KEY, fRevisionYear.getText());
 		store.setValue(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY, fUseDefaultRevisionYear.getSelection());
 		store.setValue(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY, fReplaceAllExisting.getSelection());
+		store.setValue(RelEngCopyrightConstants.EPL_VERSION, fUpdateLicenseVersion.getSelection());
 		// disable fix up existing copyright till it works better
 //		store.setValue(RelEngCopyrightConstants.FIX_UP_EXISTING_KEY, fFixExisting.getSelection());
 		store.setValue(RelEngCopyrightConstants.IGNORE_PROPERTIES_KEY, fIgnoreProperties.getSelection());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2014 IBM Corporation and others.
+ * Copyright (c) 2004, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -26,4 +26,5 @@ public class RelEngCopyrightConstants {
 	public final static String REPLACE_ALL_EXISTING_KEY = "org.eclipse.releng.tools.replaceAllExisting"; //$NON-NLS-1$
 	public final static String IGNORE_PROPERTIES_KEY = "org.eclipse.releng.tools.ignoreProperties"; //$NON-NLS-1$
 	public final static String IGNORE_XML_KEY = "org.eclipse.releng.tools.ignoreXml"; //$NON-NLS-1$
+	public final static String EPL_VERSION = "org.eclipse.releng.tools.epl_version"; //$NON-NLS-1$
 }

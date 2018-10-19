@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2060 IBM Corporation and others.
+ * Copyright (c) 2010, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -160,9 +160,11 @@ public class IBMCopyrightComment extends CopyrightComment {
 		println(writer, " IBM Corporation and others."); //$NON-NLS-1$
 
 		println(writer, linePrefix + " All rights reserved. This program and the accompanying materials"); //$NON-NLS-1$
-		println(writer, linePrefix + " are made available under the terms of the Eclipse Public License v1.0"); //$NON-NLS-1$
+		println(writer, linePrefix + " are made available under the terms of the Eclipse Public License 2.0"); //$NON-NLS-1$
 		println(writer, linePrefix + " which accompanies this distribution, and is available at"); //$NON-NLS-1$
-		println(writer, linePrefix + " http://www.eclipse.org/legal/epl-v10.html"); //$NON-NLS-1$
+		println(writer, linePrefix + " https://www.eclipse.org/legal/epl-2.0/"); //$NON-NLS-1$
+		println(writer, linePrefix);
+		println(writer, linePrefix + " SPDX-License-Identifier: EPL-2.0"); //$NON-NLS-1$
 	}
 
 	private void writeContributions(PrintWriter writer, String linePrefix) {

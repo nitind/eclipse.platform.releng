@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2016 IBM Corporation and others.
+ * Copyright (c) 2004, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -135,10 +135,39 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 
         String comment = commentBock.getContents();
 
+		if (getPreferenceStore().getBoolean(RelEngCopyrightConstants.EPL_VERSION)) {
+			int start;
+			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
+				int end = start + 1;
+				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
+						&& comment.charAt(end) != ';')
+					end++;
+				while (!Character.isWhitespace(comment.charAt(start - 1)) && comment.charAt(start - 1) != '&'
+						&& comment.charAt(start - 1) != ';')
+					start--;
+				String uri = comment.substring(start, end);
+				if (comment.regionMatches(end, NEW_LINE, 0, NEW_LINE.length())
+						&& !comment.contains("SPDX-License-Identifier")) { //$NON-NLS-1$
+					comment = comment.replace(uri,
+							"https://www.eclipse.org/legal/epl-2.0/\n" + trimEnd(getLinePrefix(commentStyle)) + "\n" //$NON-NLS-1$ //$NON-NLS-2$
+									+ getLinePrefix(commentStyle) + " SPDX-License-Identifier: EPL-2.0"); //$NON-NLS-1$
+				} else {
+					comment = comment.replace(uri, "https://www.eclipse.org/legal/epl-2.0/"); //$NON-NLS-1$
+				}
+				comment = comment.replace("Eclipse Public License v1.0", "Eclipse Public License 2.0"); //$NON-NLS-1$//$NON-NLS-2$
+				comment = comment.replace("Eclipse Public License\n" + getLinePrefix(commentStyle) + " v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse Public License\n" + getLinePrefix(commentStyle) + " 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				comment = comment.replace("Eclipse Public\n" + getLinePrefix(commentStyle) + " License v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse Public\n" + getLinePrefix(commentStyle) + " License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				comment = comment.replace("Eclipse\n" + getLinePrefix(commentStyle) + " Public License v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse\n" + getLinePrefix(commentStyle) + " Public License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		}
+
         // identify which line delimiter is used. (for writing back to file )
         String fileLineDelimiter = TextUtilities.determineLineDelimiter(comment, "\n"); //$NON-NLS-1$
 
-        // Split Comment into Seperate lines for easier proccessing:
+        // Split Comment into Separate lines for easier processing:
         String commentLines[] = comment.split("\\r?\\n"); //$NON-NLS-1$
 
         // lines before the line with the year comment on it.
@@ -179,7 +208,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
                 yearFound = true;
                 yearLine = line + fileLineDelimiter;
             } else {
-                // We are parsting the top part of the comment and have not reached the year-line yet.
+                // We are parsing the top part of the comment and have not reached the year-line yet.
                 preYearLines.append(line + fileLineDelimiter);
             }
         }
@@ -208,6 +237,17 @@ public class AdvancedCopyrightComment extends CopyrightComment {
         return new AdvancedCopyrightComment(commentStyle, createdYear, revisedYear, yearsOnLine,
                 preYearLines.toString(), yearLine, postYearLines.toString());
     }
+
+	private static String trimEnd(String linePrefix) {
+		char[] prefix = linePrefix.toCharArray();
+		int index = prefix.length;
+		while (index > 0 && Character.isWhitespace(prefix[index - 1])) {
+			index--;
+		}
+		if (index < 0)
+			return ""; //$NON-NLS-1$
+		return linePrefix.substring(0, index);
+	}
 
     /**
      * <p> Construct a new default comment for the file.</p>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2016 IBM Corporation and others.
+ * Copyright (c) 2004, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -473,7 +473,7 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 
 		// only exit if existing copyright comment already contains the year
 		// of last modification and not overwriting all comments
-		if (lastMod <= revised && (copyrightComment != null) && (!prefStore.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY)))
+		if (lastMod <= revised && (copyrightComment != null) && (!prefStore.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY)) && !prefStore.getBoolean(RelEngCopyrightConstants.EPL_VERSION))
 			return;
 
 		// either replace old copyright or put the new one at the top of the file
