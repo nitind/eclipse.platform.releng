@@ -12,6 +12,7 @@
  *     IBM Corporation - initial API and implementation
  *     Martin Oberhuber (Wind River) - [276255] fix insertion of extra space chars
  *     Leo Ufimtsev lufimtse@redhat.com - [369991] Major re-write to handle multiple years. + added test cases.
+ *     Nitin Dahyabhai nitind@us.ibm.com - [540661] Optional rewrite from EPL v1.0 to EPL 2 with SPDX-License-Identifier
  *******************************************************************************/
 package org.eclipse.releng.tools;
 
@@ -140,27 +141,47 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
 				int end = start + 1;
 				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
-						&& comment.charAt(end) != ';')
+						&& comment.charAt(end) != ';') {
 					end++;
+				}
 				while (!Character.isWhitespace(comment.charAt(start - 1)) && comment.charAt(start - 1) != '&'
-						&& comment.charAt(start - 1) != ';')
+						&& comment.charAt(start - 1) != ';') {
 					start--;
+				}
 				String uri = comment.substring(start, end);
+				String commentLinePrefix = getLinePrefix(commentStyle);
 				if (comment.regionMatches(end, NEW_LINE, 0, NEW_LINE.length())
 						&& !comment.contains("SPDX-License-Identifier")) { //$NON-NLS-1$
+					int lineStart = start;
+					String spdxIndentation = " "; //$NON-NLS-1$
+					while (lineStart > 0 && comment.charAt(lineStart - 1) != '\n' && comment.charAt(lineStart - 1) != '\r') {
+						lineStart--;
+					}
+					while (lineStart < start && !comment.regionMatches(lineStart, commentLinePrefix, 0, commentLinePrefix.length())) {
+						lineStart++;
+					}
+					/*
+					 * if the expected comment prefix is present, consider it
+					 * the point at which to measure the correct indentation
+					 */
+					if (comment.regionMatches(lineStart, commentLinePrefix, 0, commentLinePrefix.length())) {
+						lineStart += commentLinePrefix.length();
+						spdxIndentation = comment.substring(lineStart, start);
+					}
+					
 					comment = comment.replace(uri,
-							"https://www.eclipse.org/legal/epl-2.0/\n" + trimEnd(getLinePrefix(commentStyle)) + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-									+ getLinePrefix(commentStyle) + " SPDX-License-Identifier: EPL-2.0"); //$NON-NLS-1$
+							"https://www.eclipse.org/legal/epl-2.0/\n" + trimEnd(commentLinePrefix) + "\n" //$NON-NLS-1$ //$NON-NLS-2$
+									+ commentLinePrefix + spdxIndentation + "SPDX-License-Identifier: EPL-2.0"); //$NON-NLS-1$
 				} else {
 					comment = comment.replace(uri, "https://www.eclipse.org/legal/epl-2.0/"); //$NON-NLS-1$
 				}
 				comment = comment.replace("Eclipse Public License v1.0", "Eclipse Public License 2.0"); //$NON-NLS-1$//$NON-NLS-2$
-				comment = comment.replace("Eclipse Public License\n" + getLinePrefix(commentStyle) + " v1.0", //$NON-NLS-1$//$NON-NLS-2$
-						"Eclipse Public License\n" + getLinePrefix(commentStyle) + " 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
-				comment = comment.replace("Eclipse Public\n" + getLinePrefix(commentStyle) + " License v1.0", //$NON-NLS-1$//$NON-NLS-2$
-						"Eclipse Public\n" + getLinePrefix(commentStyle) + " License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
-				comment = comment.replace("Eclipse\n" + getLinePrefix(commentStyle) + " Public License v1.0", //$NON-NLS-1$//$NON-NLS-2$
-						"Eclipse\n" + getLinePrefix(commentStyle) + " Public License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				comment = comment.replace("Eclipse Public License\n" + commentLinePrefix + " v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse Public License\n" + commentLinePrefix + " 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				comment = comment.replace("Eclipse Public\n" + commentLinePrefix + " License v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse Public\n" + commentLinePrefix + " License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
+				comment = comment.replace("Eclipse\n" + commentLinePrefix + " Public License v1.0", //$NON-NLS-1$//$NON-NLS-2$
+						"Eclipse\n" + commentLinePrefix + " Public License 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 

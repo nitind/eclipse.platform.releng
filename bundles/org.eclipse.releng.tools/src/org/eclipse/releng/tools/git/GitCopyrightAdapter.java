@@ -42,7 +42,7 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 	private static String filterString = "copyright"; // lowercase //$NON-NLS-1$
 
 	/* continue to the next commit if the current one starts with one of the following strings */
-	private static String[] skipOnMessages = new String[] {"move bundles"}; //$NON-NLS-1$
+	private static String[] filterStartStrings = new String[] {"move bundles"}; //$NON-NLS-1$
 
 	public GitCopyrightAdapter(IResource[] resources) {
 		super(resources);
@@ -78,7 +78,7 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 									return 0;
 								}
 							}
-							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), skipOnMessages)) {
+							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), filterStartStrings)) {
 								commit = walk.next();
 								if (commit == null) {
 									return 0;
