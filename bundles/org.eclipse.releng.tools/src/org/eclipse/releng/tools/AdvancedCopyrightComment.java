@@ -136,6 +136,10 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 
         String comment = commentBock.getContents();
 
+        // identify which line delimiter is used. (for writing back to file )
+        String fileLineDelimiter = TextUtilities.determineLineDelimiter(comment, "\n"); //$NON-NLS-1$
+
+        boolean licenseUpdated = false;
 		if (getPreferenceStore().getBoolean(RelEngCopyrightConstants.EPL_VERSION)) {
 			int start;
 			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
@@ -150,7 +154,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 				}
 				String uri = comment.substring(start, end);
 				String commentLinePrefix = getLinePrefix(commentStyle);
-				if (comment.regionMatches(end, NEW_LINE, 0, NEW_LINE.length())
+				if (comment.regionMatches(end, fileLineDelimiter, 0, fileLineDelimiter.length())
 						&& !comment.contains("SPDX-License-Identifier")) { //$NON-NLS-1$
 					int lineStart = start;
 					String spdxIndentation = " "; //$NON-NLS-1$
@@ -175,6 +179,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 				} else {
 					comment = comment.replace(uri, "https://www.eclipse.org/legal/epl-2.0/"); //$NON-NLS-1$
 				}
+				licenseUpdated = true;
 				comment = comment.replace("Eclipse Public License v1.0", "Eclipse Public License 2.0"); //$NON-NLS-1$//$NON-NLS-2$
 				comment = comment.replace("Eclipse Public License\n" + commentLinePrefix + " v1.0", //$NON-NLS-1$//$NON-NLS-2$
 						"Eclipse Public License\n" + commentLinePrefix + " 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -185,11 +190,8 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 			}
 		}
 
-        // identify which line delimiter is used. (for writing back to file )
-        String fileLineDelimiter = TextUtilities.determineLineDelimiter(comment, "\n"); //$NON-NLS-1$
-
         // Split Comment into Separate lines for easier processing:
-        String commentLines[] = comment.split("\\r?\\n"); //$NON-NLS-1$
+        String commentLines[] = comment.split("\\r?\\n|\\r\\n?"); //$NON-NLS-1$
 
         // lines before the line with the year comment on it.
         StringBuilder preYearLines = new StringBuilder();
@@ -225,7 +227,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
                 }
 
             } else if (line.matches(".*" + YEAR_REGEX + ".*")) { //$NON-NLS-1$ //$NON-NLS-2$
-                // We found the line with the copy-right years on it.
+                // We found the line with the copyright years on it.
                 yearFound = true;
                 yearLine = line + fileLineDelimiter;
             } else {
@@ -235,7 +237,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
         }
 
         // The comment didn't contain any years that we can update.
-        if (!yearFound) {
+        if (!yearFound && !licenseUpdated) {
             return null;
         }
 
