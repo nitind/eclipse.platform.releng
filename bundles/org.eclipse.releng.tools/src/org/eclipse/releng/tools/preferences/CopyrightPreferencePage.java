@@ -81,40 +81,42 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 
 		// copyright template editor
 		fEditor = createEditor(fComposite);
-		
+
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		data.horizontalIndent = 0;
 		fInstructions = new Text(fComposite, SWT.READ_ONLY);
 		fInstructions.setText(Messages.getString("CopyrightPreferencePage.0")); //$NON-NLS-1$
 		fInstructions.setLayoutData(data);
-		
-		// default creation year
-		fCreationYearLabel = new Label(fComposite, SWT.NONE);
-		fCreationYearLabel.setText(Messages.getString("CopyrightPreferencePage.1")); //$NON-NLS-1$
-		fCreationYear = new Text(fComposite, SWT.BORDER);
-		fCreationYear.setTextLimit(4);
-		
-		// default revision year
-		fRevisionYearLabel = new Label(fComposite, SWT.NONE);
-		fRevisionYearLabel.setText(Messages.getString("CopyrightPreferencePage.7")); //$NON-NLS-1$
-		fRevisionYear = new Text(fComposite, SWT.BORDER);
-		fRevisionYear.setTextLimit(4);
-		
-		// always use default revision year instead of cvs lookup
-		fUseDefaultRevisionYear = new Button(fComposite, SWT.CHECK);
-		fUseDefaultRevisionYear.setText(Messages.getString("CopyrightPreferencePage.8")); //$NON-NLS-1$
-		data = new GridData();
-		data.horizontalSpan = 2;
-		fUseDefaultRevisionYear.setLayoutData(data);
-		
+
 		// replace all existing copyright statement
 		fReplaceAllExisting = new Button(fComposite, SWT.CHECK);
 		fReplaceAllExisting.setText(Messages.getString("CopyrightPreferencePage.2")); //$NON-NLS-1$
 		data = new GridData();
 		data.horizontalSpan = 2;
 		fReplaceAllExisting.setLayoutData(data);
-		
+
+		new Label(fComposite, SWT.NONE).setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false, 2, 1));
+
+		// default creation year
+		fCreationYearLabel = new Label(fComposite, SWT.NONE);
+		fCreationYearLabel.setText(Messages.getString("CopyrightPreferencePage.1")); //$NON-NLS-1$
+		fCreationYear = new Text(fComposite, SWT.BORDER);
+		fCreationYear.setTextLimit(4);
+
+		// default revision year
+		fRevisionYearLabel = new Label(fComposite, SWT.NONE);
+		fRevisionYearLabel.setText(Messages.getString("CopyrightPreferencePage.7")); //$NON-NLS-1$
+		fRevisionYear = new Text(fComposite, SWT.BORDER);
+		fRevisionYear.setTextLimit(4);
+
+		// always use default revision year instead of cvs lookup
+		fUseDefaultRevisionYear = new Button(fComposite, SWT.CHECK);
+		fUseDefaultRevisionYear.setText(Messages.getString("CopyrightPreferencePage.8")); //$NON-NLS-1$
+		data = new GridData();
+		data.horizontalSpan = 2;
+		fUseDefaultRevisionYear.setLayoutData(data);
+
 		// disable fix up existing copyright till it works better
 //		// fix up existing copyright statement
 //		fFixExisting = new Button(fComposite, SWT.CHECK);
@@ -122,7 +124,9 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 //		data = new GridData();
 //		data.horizontalSpan = 2;
 //		fFixExisting.setLayoutData(data);
-		
+
+		new Label(fComposite, SWT.NONE).setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false, 2, 1));
+
 		// ignore properties files
 		fIgnoreProperties = new Button(fComposite, SWT.CHECK);
 		fIgnoreProperties.setText(Messages.getString("CopyrightPreferencePage.4")); //$NON-NLS-1$
@@ -130,13 +134,15 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		data.horizontalSpan = 2;
 		fIgnoreProperties.setLayoutData(data);
 
-		
+
 		//[276257] re-enabling xml files
 		fIgnoreXml = new Button(fComposite, SWT.CHECK);
 		fIgnoreXml.setText(Messages.getString("CopyrightPreferencePage.9")); //$NON-NLS-1$
 		data = new GridData();
 		data.horizontalSpan = 2;
 		fIgnoreXml.setLayoutData(data);
+
+		new Label(fComposite, SWT.NONE).setLayoutData(new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false, 2, 1));
 
 		fUpdateLicenseVersion = new Button(fComposite, SWT.CHECK);
 		fUpdateLicenseVersion.setText(Messages.getString("CopyrightPreferencePage.10")); //$NON-NLS-1$
