@@ -422,7 +422,7 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 			}
 		}
 
-		//Could not determine the 'new' 'copyright' header. Do not procces file. 
+		//Could not determine the 'new' 'copyright' header. Do not process file.
 		if (ibmCopyright == null) {
 			warn(file, copyrightComment, Messages.getString("AdvancedFixCopyrightAction.16")); //$NON-NLS-1$
 			return;
@@ -433,7 +433,7 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 		// year last revised as listed in the copyright header. 
 		int revised = ibmCopyright.getRevisionYear();
 		
-		//lasdMod = last touched by user. (e.g as defined 'default' in options). 
+		//lastMod = last touched by user. (e.g as defined 'default' in options). 
  		int lastMod = revised;
 
  		//Read user defined year from options.
@@ -487,7 +487,16 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 			if (!copyrightComment.atTop() && (aSourceFile.getFileType() != CopyrightComment.XML_COMMENT)) {
 				warn(file, copyrightComment, Messages.getString("AdvancedFixCopyrightAction.19")); //$NON-NLS-1$
 			}
-			aSourceFile.replace(copyrightComment, ibmCopyright.getCopyrightComment());
+
+			String oldLicenseSubstring = null;
+			if (prefStore.getBoolean(RelEngCopyrightConstants.EPL_VERSION)) {
+				oldLicenseSubstring = "eclipse.org/legal/epl-v10"; //$NON-NLS-1$
+			}
+
+			boolean oldLicensePresent = aSourceFile.replace(copyrightComment, ibmCopyright.getCopyrightComment(), oldLicenseSubstring);
+			if (oldLicensePresent) {
+				warn(file, null, Messages.getString("AdvancedFixCopyrightAction.23")); //$NON-NLS-1$
+			}
 		}
 	}
 

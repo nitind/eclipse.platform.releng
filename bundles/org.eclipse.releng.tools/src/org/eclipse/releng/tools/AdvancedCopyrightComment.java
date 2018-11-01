@@ -28,7 +28,7 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.releng.tools.preferences.RelEngCopyrightConstants;
 
 /**
- * <h2>Handle incomming 'raw' comments and convert them <br>
+ * <h2>Handle incoming 'raw' comments and convert them <br>
  * into a comment format with access to creation/revision year. <br>
  * When retrieving the comment, update the revision year or append one if it's not there.</h2>
  *
@@ -262,14 +262,17 @@ public class AdvancedCopyrightComment extends CopyrightComment {
     }
 
 	private static String trimEnd(String linePrefix) {
-		char[] prefix = linePrefix.toCharArray();
-		int index = prefix.length;
-		while (index > 0 && Character.isWhitespace(prefix[index - 1])) {
-			index--;
+		if (Character.isWhitespace(linePrefix.charAt(linePrefix.length() - 1))) {
+			char[] prefix = linePrefix.toCharArray();
+			int index = prefix.length;
+			while (index > 0 && Character.isWhitespace(prefix[index - 1])) {
+				index--;
+			}
+			if (index < 0)
+				return ""; //$NON-NLS-1$
+			return linePrefix.substring(0, index);
 		}
-		if (index < 0)
-			return ""; //$NON-NLS-1$
-		return linePrefix.substring(0, index);
+		return linePrefix;
 	}
 
     /**
@@ -351,9 +354,9 @@ public class AdvancedCopyrightComment extends CopyrightComment {
                 // just write out the line
                 if (NEW_LINE.equals(currentLine)) {
                     // handle empty lines
-                    println(writer, linePrefix);
+                    println(writer, trimEnd(linePrefix));
                 } else {
-                    println(writer, linePrefix + ' ' + currentLine);
+                    println(writer, trimEnd(linePrefix + ' ' + currentLine));
                 }
             }
         }

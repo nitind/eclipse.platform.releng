@@ -31,6 +31,7 @@ import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextUtilities;
@@ -267,23 +268,27 @@ public abstract class SourceFile {
 	}
 
 	/**
-	 * @param aCommet
+	 * @param aComment
 	 * @param newCopyrightComment          Comment to be inserted.
+	 * @param checkString a string to check for in the changed file contents, or <code>null</code>
+	 * @return whether the resulting file will contain the given checkString, if one was given
 	 */
-	public void replace(BlockComment aComment, String newCopyrightComment) {
-		
-	
+	public boolean replace(BlockComment aComment, String newCopyrightComment, String checkString) {
+		boolean found = false;
 		try {
 			ITextFileBuffer fileBuffer = openFileBuffer();
 			if (fileBuffer == null)
-				return;
+				return false;
 			
 			IDocument document= fileBuffer.getDocument();
 
 			IRegion startLine= document.getLineInformation(aComment.start);
 			IRegion endLine= document.getLineInformation(aComment.end + 1);
 			document.replace(startLine.getOffset(), endLine.getOffset() - startLine.getOffset(), newCopyrightComment);
-			
+			if (checkString != null) {
+				found = new FindReplaceDocumentAdapter(document).find(0, checkString, true, true, false, false) != null;
+			}
+
 			fileBuffer.commit(null, false);
 		
 		} catch (BadLocationException e) {
@@ -293,12 +298,14 @@ public abstract class SourceFile {
 		} finally  {
 		    closeFileBuffer();
 			try {
-			        FileBuffers.getTextFileBufferManager().disconnect(file.getFullPath(), LocationKind.IFILE, null);
+				FileBuffers.getTextFileBufferManager().disconnect(file.getFullPath(), LocationKind.IFILE, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
-				return;
+				return false;
 			}
 		}
+
+		return found;
 	}
 
 	/**

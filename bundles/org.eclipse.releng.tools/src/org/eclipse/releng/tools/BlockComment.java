@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000, 2016 IBM Corporation and others.
+ * Copyright (c) 2000, 2018 IBM Corporation and others.
  *
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
@@ -33,6 +33,9 @@ public class BlockComment {
 	private List<String> nonIBMContributors = new ArrayList<>();
 	private String commentEnd;
 
+    /** A regex mattern to match years in the range {@code 19** to 23** } */
+    private static final String YEAR_REGEX = "(19|20|21|22|23)\\d{2}"; //$NON-NLS-1$
+
 	
 	/**
 	 * @param commentStart
@@ -54,7 +57,17 @@ public class BlockComment {
 	 * @return boolean
 	 */
 	public boolean isCopyright() {
-		return contents.toLowerCase().indexOf("copyright") != -1;
+		String lowercase = contents.toLowerCase();
+		if (lowercase.indexOf("copyright") != -1) { //$NON-NLS-1$
+			// look more thoroughly
+			String[] lines = lowercase.split("\r|\n"); //$NON-NLS-1$
+			for (int i = 0; i < lines.length; i++) {
+				if (lines[i].matches(".*opyright.*" + YEAR_REGEX + ".*")) { //$NON-NLS-1$ //$NON-NLS-2$
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
