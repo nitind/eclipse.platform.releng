@@ -158,7 +158,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 						&& !comment.contains("SPDX-License-Identifier")) { //$NON-NLS-1$
 					int lineStart = start;
 					String spdxIndentation = " "; //$NON-NLS-1$
-					while (lineStart > 0 && comment.charAt(lineStart - 1) != '\n' && comment.charAt(lineStart - 1) != '\r') {
+					while (lineStart > 0 && (comment.charAt(lineStart - 1) != '\n' && comment.charAt(lineStart - 1) != '\r') && Character.isWhitespace(comment.charAt(lineStart - 1))) {
 						lineStart--;
 					}
 					while (lineStart < start && !comment.regionMatches(lineStart, commentLinePrefix, 0, commentLinePrefix.length())) {
