@@ -142,14 +142,15 @@ public class AdvancedCopyrightComment extends CopyrightComment {
         boolean licenseUpdated = false;
 		if (getPreferenceStore().getBoolean(RelEngCopyrightConstants.EPL_VERSION)) {
 			int start;
+			/* Encompass URLs for any version of EPL v1 (php, html, etc.) for update */
 			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
 				int end = start + 1;
 				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
-						&& comment.charAt(end) != ';') {
+						&& comment.charAt(end) != ';' && comment.charAt(end) != '<' && comment.charAt(end) != '>') {
 					end++;
 				}
 				while (!Character.isWhitespace(comment.charAt(start - 1)) && comment.charAt(start - 1) != '&'
-						&& comment.charAt(start - 1) != ';') {
+						&& comment.charAt(start - 1) != ';' && comment.charAt(start - 1) != '<' && comment.charAt(start - 1) != '>') {
 					start--;
 				}
 				String uri = comment.substring(start, end);
