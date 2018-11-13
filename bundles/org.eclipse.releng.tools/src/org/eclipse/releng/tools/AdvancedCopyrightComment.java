@@ -4,7 +4,7 @@
  * This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
- * https://www.eclipse.org/legal/epl-2.0/
+ * https://www.eclipse.org/legal/epl-2.0/.
  *
  * SPDX-License-Identifier: EPL-2.0
  *
@@ -145,13 +145,16 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 			/* Encompass URLs for any version of EPL v1 (php, html, etc.) for update */
 			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
 				int end = start + 1;
-				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
-						&& comment.charAt(end) != ';' && comment.charAt(end) != '<' && comment.charAt(end) != '>') {
-					end++;
-				}
 				while (!Character.isWhitespace(comment.charAt(start - 1)) && comment.charAt(start - 1) != '&'
-						&& comment.charAt(start - 1) != ';' && comment.charAt(start - 1) != '<' && comment.charAt(start - 1) != '>') {
+						&& comment.charAt(start - 1) != ';' && comment.charAt(start - 1) != '<'
+						&& comment.charAt(start - 1) != '>' && comment.charAt(start - 1) != '.'
+						&& comment.charAt(end) != ',') {
 					start--;
+				}
+				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
+						&& comment.charAt(end) != ';' && comment.charAt(end) != '<' && comment.charAt(end) != '>'
+						&& comment.charAt(end) != '.' && comment.charAt(end) != ',') {
+					end++;
 				}
 				String uri = comment.substring(start, end);
 				String commentLinePrefix = getLinePrefix(commentStyle);
