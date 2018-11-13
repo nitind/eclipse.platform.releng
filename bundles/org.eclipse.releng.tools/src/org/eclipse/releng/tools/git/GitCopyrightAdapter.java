@@ -4,9 +4,9 @@
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which accompanies this distribution,
-t https://www.eclipse.org/legal/epl-2.0/
-t
-t SPDX-License-Identifier: EPL-2.0.
+ * https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0.
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation of CVS adapter
@@ -39,10 +39,10 @@ import org.eclipse.releng.tools.RepositoryProviderCopyrightAdapter;
 public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 
 	/* filter files if the most recent commit contains this string */
-	private static String filterString = "copyright"; // lowercase //$NON-NLS-1$
+	private static String[] filterStrings = new String[] {"copyright", "license"}; // lowercase //$NON-NLS-1$ //$NON-NLS-2$
 
 	/* continue to the next commit if the current one starts with one of the following strings */
-	private static String[] filterStartStrings = new String[] {"move bundles"}; //$NON-NLS-1$
+	private static String[] filterStringStarts = new String[] {"move bundles"}; // lowercase  //$NON-NLS-1$
 
 	public GitCopyrightAdapter(IResource[] resources) {
 		super(resources);
@@ -50,11 +50,22 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 
 	private boolean startsWithAnyOf(String test, String[] candidates) {
 		for (int i = 0; i < candidates.length; i++) {
-			if (test.startsWith(candidates[i])) return true;
+			if (test.startsWith(candidates[i])) {
+				return true;
+			}
 		}
 		return false;
 	}
 
+	private boolean containsAnyOf(String test, String[] candidates) {
+		for (int i = 0; i < candidates.length; i++) {
+			if (test.contains(candidates[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public int getLastModifiedYear(IFile file, IProgressMonitor monitor)
 			throws CoreException {
@@ -72,13 +83,13 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 						walk.markStart(walk.lookupCommit(start));
 						RevCommit commit = walk.next();
 						if (commit != null) {
-							if (commit.getFullMessage().toLowerCase().contains(filterString)) {
+							while (containsAnyOf(commit.getFullMessage().toLowerCase(), filterStrings)) {
 								commit = walk.next();
 								if (commit == null) {
 									return 0;
 								}
 							}
-							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), filterStartStrings)) {
+							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), filterStringStarts)) {
 								commit = walk.next();
 								if (commit == null) {
 									return 0;
