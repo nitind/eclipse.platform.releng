@@ -144,16 +144,18 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 			int start;
 			/* Encompass URLs for any version of EPL v1 (php, html, etc.) for update */
 			if ((start = comment.indexOf("www.eclipse.org/legal/epl-v10")) > 0) { //$NON-NLS-1$
-				int end = start + 1;
-				while (!Character.isWhitespace(comment.charAt(start - 1)) && comment.charAt(start - 1) != '&'
-						&& comment.charAt(start - 1) != ';' && comment.charAt(start - 1) != '<'
-						&& comment.charAt(start - 1) != '>' && comment.charAt(start - 1) != '.'
-						&& comment.charAt(end) != ',') {
+				int end = start + "www.eclipse.org/legal/epl-v10".length(); //$NON-NLS-1$
+				while (!Character.isWhitespace(comment.charAt(start - 1))
+						&& !(comment.charAt(start - 1) == '&' || comment.charAt(start - 1) == ';'
+								|| comment.charAt(start - 1) == '<' || comment.charAt(start - 1) == '>'
+								|| comment.charAt(start - 1) == ',' || comment.charAt(start - 1) == '.')) {
 					start--;
 				}
-				while (!Character.isWhitespace(comment.charAt(end)) && comment.charAt(end) != '&'
-						&& comment.charAt(end) != ';' && comment.charAt(end) != '<' && comment.charAt(end) != '>'
-						&& comment.charAt(end) != '.' && comment.charAt(end) != ',') {
+				while (!Character.isWhitespace(comment.charAt(end))
+						&& !(comment.charAt(end) == '&' || comment.charAt(end) == ';' || comment.charAt(end) == '<'
+								|| comment.charAt(end) == '>')
+						|| (end + 1 < comment.length() && (comment.charAt(end) == '.' || comment.charAt(end) == ',')
+								&& Character.isWhitespace(comment.charAt(end + 1)))) {
 					end++;
 				}
 				String uri = comment.substring(start, end);
