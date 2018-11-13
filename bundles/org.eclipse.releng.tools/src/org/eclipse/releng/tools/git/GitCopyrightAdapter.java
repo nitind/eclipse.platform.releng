@@ -83,21 +83,17 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 						walk.markStart(walk.lookupCommit(start));
 						RevCommit commit = walk.next();
 						if (commit != null) {
-							while (containsAnyOf(commit.getFullMessage().toLowerCase(), filterStrings)) {
+							String fullMessage = commit.getFullMessage();
+							while (containsAnyOf(fullMessage.toLowerCase(), filterStrings) || startsWithAnyOf(fullMessage.toLowerCase(), filterStringStarts)) {
 								commit = walk.next();
 								if (commit == null) {
 									return 0;
 								}
-							}
-							while (startsWithAnyOf(commit.getFullMessage().toLowerCase(), filterStringStarts)) {
-								commit = walk.next();
-								if (commit == null) {
-									return 0;
-								}
+								fullMessage = commit.getFullMessage();
 							}
 
 							boolean isSWT= file.getProject().getName().startsWith("org.eclipse.swt"); //$NON-NLS-1$
-							String logComment= commit.getFullMessage();
+							String logComment= fullMessage;
 							if (isSWT && (logComment.indexOf("restore HEAD after accidental deletion") != -1 || logComment.indexOf("fix permission of files") != -1)) { //$NON-NLS-1$ //$NON-NLS-2$
 								// ignore commits with above comments
 								return 0;
