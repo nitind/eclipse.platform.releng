@@ -61,7 +61,7 @@ public abstract class SourceFile {
 				return new PropertiesFile(file);
 	        } else if (extension.equals("sh") || extension.equals("csh") || extension.equals("mak") || extension.equals("pl") || extension.equals("tcl")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	            return new ShellMakeFile(file);
-	        } else if (extension.equals("bat")) { //$NON-NLS-1$
+	        } else if (extension.equals("bat") || extension.equals("cmd")) { //$NON-NLS-1$ //$NON-NLS-2$
 	            return new BatFile(file);
 			} else if (extension.equals("js")) { //$NON-NLS-1$
 	            return new JavaScriptFile(file);
