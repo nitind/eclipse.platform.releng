@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
@@ -120,6 +122,24 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 	private String newLine = System.getProperty("line.separator"); //$NON-NLS-1$
 	private Map<String, List<String>> log = new HashMap<>();
 	private MessageConsole console;
+	private static String[] ignoredFileExtensions;
+	private static String[] ignoredFileNames = new String[] {"about.html", "plugin.xml"};  //$NON-NLS-1$//$NON-NLS-2$
+
+	static {
+		IContentType imageContentType = Platform.getContentTypeManager().getContentType("org.eclipse.ui.content-type.images"); //$NON-NLS-1$
+		Set<String> extensions = new HashSet<>();
+		extensions.add("class"); //$NON-NLS-1$
+		IContentType[] contentTypes = Platform.getContentTypeManager().getAllContentTypes();
+		for (int i = 0, length = contentTypes.length; i < length; i++) {
+			if (contentTypes[i].isKindOf(imageContentType)) {
+				String[] fileExtension = contentTypes[i].getFileSpecs(IContentType.FILE_EXTENSION_SPEC);
+				for (int j = 0; j < fileExtension.length; j++) {
+					extensions.add(fileExtension[j]);
+				}
+			}
+		}
+		ignoredFileExtensions = extensions.toArray(new String[extensions.size()]);
+	}
 
 	// The current selection
 	protected IStructuredSelection selection;
@@ -369,8 +389,8 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 	 */
 	private void processFile(IFile file, RepositoryProviderCopyrightAdapter adapter, IProgressMonitor monitor) {
 
-		//Missign file Extension 
-		if (! checkFileExtension(file)) {
+		//Missing file Extension
+		if (! checkFileSupport(file)) {
 		    return;
 		}
 
@@ -402,12 +422,28 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 		// if replacing all comments, don't even parse, just use default copyright comment
 		if (prefStore.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY)) {
 		    
-		        //Aquire user default comments from settings.
-			ibmCopyright = AdvancedCopyrightComment.defaultComment(aSourceFile.getFileType());
+	        //Acquire user default comments from settings.
+			int creationYear = -1;
+			try {
+				creationYear = adapter.getCreationYear(file, monitor);
+			} catch (CoreException e) {
+				warn(file, copyrightComment, Messages.getString("AdvancedFixCopyrightAction.10")); //$NON-NLS-1$
+			}
+			ibmCopyright = AdvancedCopyrightComment.defaultComment(aSourceFile.getFileType(), creationYear);
 		} else {
-		    
-		        //Parse the raw comment and update the last revision year. (inserting a revision year if neccessary). 
-			ibmCopyright = AdvancedCopyrightComment.parse(copyrightComment, aSourceFile.getFileType());  
+		    if (copyrightComment != null) {
+				//Parse the raw comment and update the last revision year. (inserting a revision year if necessary). 
+				ibmCopyright = AdvancedCopyrightComment.parse(copyrightComment, aSourceFile.getFileType());
+			} else {
+				int creationYear = -1;
+				try {
+					creationYear = adapter.getCreationYear(file, monitor);
+					ibmCopyright = new AdvancedCopyrightComment(aSourceFile.getFileType(), creationYear, Calendar.getInstance().get(Calendar.YEAR), 1, null, null, null);
+				} catch (CoreException e) {
+					warn(file, copyrightComment, Messages.getString("AdvancedFixCopyrightAction.10")); //$NON-NLS-1$
+					ibmCopyright = AdvancedCopyrightComment.parse(copyrightComment, aSourceFile.getFileType());
+				}
+		    }
 			
 			//Check that the newly created comment was constructed correctly. 
 			if (ibmCopyright == null) {
@@ -500,14 +536,28 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 		}
 	}
 
-    private boolean checkFileExtension(IFile file) {
-        if (file.getFileExtension() == null) {
-            warn(file, null, Messages.getString("AdvancedFixCopyrightAction.13")); //$NON-NLS-1$
-            return false;
-        } else {
-            return true;
-        }
-    }
+	private boolean checkFileSupport(IFile file) {
+		String fileName = file.getName();
+		for (int i = 0; i < ignoredFileNames.length; i++) {
+			if (fileName.equals(ignoredFileNames[i])) {
+				return false;
+			}
+		}
+
+		String fileExtension = file.getFileExtension();
+		if (fileExtension == null) {
+			warn(file, null, Messages.getString("AdvancedFixCopyrightAction.13")); //$NON-NLS-1$
+			return false;
+		} else {
+			fileExtension = fileExtension.toLowerCase();
+			for (int i = 0; i < ignoredFileExtensions.length; i++) {
+				if (fileExtension.equals(ignoredFileExtensions[i])) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
     
     private boolean checkSourceCreatedOk(SourceFile sourceFile, IFile file) {
         if (sourceFile == null) {

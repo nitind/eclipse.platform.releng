@@ -38,6 +38,16 @@ public abstract class RepositoryProviderCopyrightAdapter {
 	public abstract void initialize(IProgressMonitor monitor) throws CoreException;
 	
 	/**
+	 * Return the creation year for the given file or -1 if the
+	 * creation year could not be determined.
+	 * @param file the file
+	 * @param monitor a progress monitor
+	 * @return the creation year or -1
+	 * @throws CoreException
+	 */
+	public abstract int getCreationYear(IFile file, IProgressMonitor monitor) throws CoreException;
+
+	/**
 	 * Return the last modified year for the given file or -1 if the
 	 * last modified year could not be determined.
 	 * @param file the file

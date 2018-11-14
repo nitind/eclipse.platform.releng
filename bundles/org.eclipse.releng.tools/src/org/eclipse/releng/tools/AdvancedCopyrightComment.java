@@ -131,7 +131,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
     public static AdvancedCopyrightComment parse(BlockComment commentBock, int commentStyle) {
         // If the given comment is empty, return the default comment.
         if (commentBock == null) {
-            return defaultComment(commentStyle);
+            return defaultComment(commentStyle, -1);
         }
 
         String comment = commentBock.getContents();
@@ -287,12 +287,12 @@ public class AdvancedCopyrightComment extends CopyrightComment {
      * @param commentStyle            As defined in: CopyrightComment
      * @return                        a newly created comment.
      */
-    public static AdvancedCopyrightComment defaultComment(int commentStyle) {
-        return new AdvancedCopyrightComment(commentStyle, -1, -1, 1, null, null, null);
+    public static AdvancedCopyrightComment defaultComment(int commentStyle, int creationYear) {
+        return new AdvancedCopyrightComment(commentStyle, creationYear, -1, 1, null, null, null);
     }
 
 
-    private AdvancedCopyrightComment(int commentStyle, int creationYear, int revisionYear,
+    AdvancedCopyrightComment(int commentStyle, int creationYear, int revisionYear,
             int yearsCount, String preYearComment, String middleYearsComment, String postYearComment) {
         super(commentStyle, creationYear == -1 ? getPreferenceStore().getInt(
                 RelEngCopyrightConstants.CREATION_YEAR_KEY) : creationYear, revisionYear);

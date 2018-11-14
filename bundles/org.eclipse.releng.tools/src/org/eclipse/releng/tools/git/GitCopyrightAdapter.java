@@ -65,6 +65,47 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 		}
 		return false;
 	}
+
+	@Override
+	public int getCreationYear(IFile file, IProgressMonitor monitor) throws CoreException {
+		try {
+			final RepositoryMapping mapping = RepositoryMapping
+					.getMapping(file);
+			if (mapping != null) {
+				final Repository repo = mapping.getRepository();
+				if (repo != null) {
+					try (RevWalk walk = new RevWalk(repo)) {
+						ObjectId start = repo.resolve(Constants.HEAD);
+						walk.setTreeFilter(FollowFilter.create(mapping.getRepoRelativePath(file),
+								repo.getConfig().get(DiffConfig.KEY)));
+						walk.markStart(walk.lookupCommit(start));
+						RevCommit commit = walk.next();
+						if (commit != null) {
+							RevCommit nextCommit = commit;
+							while (nextCommit != null) {
+								commit = nextCommit;
+								nextCommit = walk.next();
+							}
+
+							final Calendar calendar = Calendar.getInstance();
+							calendar.setTimeInMillis(0);
+							calendar.add(Calendar.SECOND,
+									commit.getCommitTime());
+							return calendar.get(Calendar.YEAR);
+						}
+					} catch (final IOException e) {
+						throw new CoreException(new Status(IStatus.ERROR,
+								RelEngPlugin.ID, 0, NLS.bind(
+										"An error occured when processing {0}",
+										file.getName()), e));
+					} finally {
+					}
+				}
+			}
+		} finally {
+		}
+		return -1;
+	}
 	
 	@Override
 	public int getLastModifiedYear(IFile file, IProgressMonitor monitor)
