@@ -39,10 +39,10 @@ import org.eclipse.releng.tools.RepositoryProviderCopyrightAdapter;
 public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 
 	/* filter files if the most recent commit contains this string */
-	private static String[] filterStrings = new String[] {"copyright", "license"}; // lowercase //$NON-NLS-1$ //$NON-NLS-2$
+	private String[] filterStrings = new String[] {"copyright", "license"}; // lowercase //$NON-NLS-1$ //$NON-NLS-2$
 
 	/* continue to the next commit if the current one starts with one of the following strings */
-	private static String[] filterStringStarts = new String[] {"move bundles"}; // lowercase  //$NON-NLS-1$
+	private String[] filterStringStarts = new String[] {"move bundles"}; // lowercase  //$NON-NLS-1$
 
 	public GitCopyrightAdapter(IResource[] resources) {
 		super(resources);
@@ -96,7 +96,7 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 					} catch (final IOException e) {
 						throw new CoreException(new Status(IStatus.ERROR,
 								RelEngPlugin.ID, 0, NLS.bind(
-										"An error occured when processing {0}",
+										"An error occured when retrieving the creation year for {0}", //$NON-NLS-1$
 										file.getName()), e));
 					} finally {
 					}
@@ -125,12 +125,14 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 						RevCommit commit = walk.next();
 						if (commit != null) {
 							String fullMessage = commit.getFullMessage();
-							while (containsAnyOf(fullMessage.toLowerCase(), filterStrings) || startsWithAnyOf(fullMessage.toLowerCase(), filterStringStarts)) {
+							String lowerCaseMessage = fullMessage.toLowerCase().trim();
+							while (containsAnyOf(lowerCaseMessage, filterStrings) || startsWithAnyOf(lowerCaseMessage, filterStringStarts)) {
 								commit = walk.next();
 								if (commit == null) {
 									return 0;
 								}
 								fullMessage = commit.getFullMessage();
+								lowerCaseMessage = fullMessage.toLowerCase();
 							}
 
 							boolean isSWT= file.getProject().getName().startsWith("org.eclipse.swt"); //$NON-NLS-1$
@@ -156,7 +158,7 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 					} catch (final IOException e) {
 						throw new CoreException(new Status(IStatus.ERROR,
 								RelEngPlugin.ID, 0, NLS.bind(
-										"An error occured when processing {0}",
+										"An error occured when processing {0}", //$NON-NLS-1$
 										file.getName()), e));
 					} finally {
 					}
@@ -170,8 +172,8 @@ public class GitCopyrightAdapter extends RepositoryProviderCopyrightAdapter {
 
 	@Override
 	public void initialize(IProgressMonitor monitor) throws CoreException {
-		// TODO We should perform a bulk "log" command to get the last modified
-		// year
+		/* TODO We should perform a bulk "log" command to get the default last modified year */
+		filterStrings = RelEngPlugin.getDefault().getPreferenceStore().getString(IGitCommitConstants.FILTER_STRINGS_KEY).toLowerCase().split(","); //$NON-NLS-1$
+		filterStringStarts = RelEngPlugin.getDefault().getPreferenceStore().getString(IGitCommitConstants.FILTER_STRINGSTARTS_KEY).toLowerCase().split(","); //$NON-NLS-1$
 	}
-
 }

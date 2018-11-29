@@ -20,13 +20,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.releng.internal.tools.pomversion.IPomVersionConstants;
 import org.eclipse.releng.tools.Messages;
 import org.eclipse.releng.tools.RelEngPlugin;
+import org.eclipse.releng.tools.git.IGitCommitConstants;
 
 /**
  * Initializes default preferences for release engineering tool
  */
 public class RelEngPreferenceInitializer extends AbstractPreferenceInitializer {
 	private final String LEGAL_LINE = Messages.getString("RelEngPreferenceInitializer.0"); //$NON-NLS-1$
-	
+
 	@Override
 	public void initializeDefaultPreferences() {
         IPreferenceStore store = RelEngPlugin.getDefault().getPreferenceStore();
@@ -34,15 +35,19 @@ public class RelEngPreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(RelEngCopyrightConstants.COPYRIGHT_TEMPLATE_KEY, LEGAL_LINE);
         store.setDefault(RelEngCopyrightConstants.CREATION_YEAR_KEY, year);
 		store.setDefault(RelEngCopyrightConstants.REVISION_YEAR_KEY, year);
+        store.setDefault(RelEngCopyrightConstants.USE_DEFAULT_CREATION_YEAR_KEY, false);
         store.setDefault(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY, false);
     	// disable fix up existing copyright till it works better
 //        store.setDefault(RelEngCopyrightConstants.FIX_UP_EXISTING_KEY, false);
         store.setDefault(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY, false);
         store.setDefault(RelEngCopyrightConstants.IGNORE_PROPERTIES_KEY, false);
         store.setDefault(RelEngCopyrightConstants.IGNORE_XML_KEY, false);
+        store.setDefault(RelEngCopyrightConstants.EPL_VERSION, false);
 
         store.setDefault(IPomVersionConstants.POM_VERSION_ERROR_LEVEL, IPomVersionConstants.VALUE_ERROR);
-        store.setDefault(RelEngCopyrightConstants.EPL_VERSION, false);
+
+        store.setDefault(IGitCommitConstants.FILTER_STRINGS_KEY, "copyright, license"); //$NON-NLS-1$
+        store.setDefault(IGitCommitConstants.FILTER_STRINGSTARTS_KEY, "move bundles"); //$NON-NLS-1$
 	}
 
 }

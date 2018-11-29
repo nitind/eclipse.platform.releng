@@ -43,6 +43,13 @@
             id="org.eclipse.releng.tools.preferences.PomVersionPreferencePage"
             name="%pomPrefPage.name">
       </page>
+      <page
+            class="org.eclipse.releng.tools.preferences.GitPreferencePage"
+            id="org.eclipse.releng.tools.preferences.GitPreferencePage"
+            name="%gitPrefPage.name"
+            category="org.eclipse.releng.tools.preferences.CopyrightPreferencePage">
+            <keywordReference id="org.eclipse.releng.tools.copyright"/>
+      </page>
    </extension>
 	
 
@@ -97,6 +104,9 @@
                 value="org.eclipse.releng.tools.AdvancedFixCopyrightAction$FixConsole">
           </instanceof></enablement>
     </consolePageParticipant>
+ </extension>
+ <extension point="org.eclipse.ui.keywords">
+ 	<keyword id="org.eclipse.releng.tools.copyright" label="%copyright.label"/>
  </extension>
 
 </plugin>

@@ -421,7 +421,6 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 		
 		// if replacing all comments, don't even parse, just use default copyright comment
 		if (prefStore.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY)) {
-		    
 	        //Acquire user default comments from settings.
 			int creationYear = -1;
 			try {
@@ -437,7 +436,7 @@ public class AdvancedFixCopyrightAction implements IObjectActionDelegate {
 			} else {
 				int creationYear = -1;
 				try {
-					creationYear = adapter.getCreationYear(file, monitor);
+					creationYear = (prefStore.getBoolean(RelEngCopyrightConstants.USE_DEFAULT_CREATION_YEAR_KEY) || adapter == null) ? prefStore.getInt(RelEngCopyrightConstants.CREATION_YEAR_KEY) : adapter.getCreationYear(file, monitor);
 					ibmCopyright = new AdvancedCopyrightComment(aSourceFile.getFileType(), creationYear, Calendar.getInstance().get(Calendar.YEAR), 1, null, null, null);
 				} catch (CoreException e) {
 					warn(file, copyrightComment, Messages.getString("AdvancedFixCopyrightAction.10")); //$NON-NLS-1$

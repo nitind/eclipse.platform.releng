@@ -20,6 +20,7 @@ public class RelEngCopyrightConstants {
 	public final static String COPYRIGHT_TEMPLATE_KEY = "org.eclipse.releng.tools.copyrightTemplate"; //$NON-NLS-1$
 	public final static String CREATION_YEAR_KEY = "org.eclipse.releng.tools.creationYear"; //$NON-NLS-1$
 	public final static String REVISION_YEAR_KEY = "org.eclipse.releng.tools.revisionYear"; //$NON-NLS-1$
+	public final static String USE_DEFAULT_CREATION_YEAR_KEY = "org.eclipse.releng.tools.useDefaultCreationYear"; //$NON-NLS-1$
 	public final static String USE_DEFAULT_REVISION_YEAR_KEY = "org.eclipse.releng.tools.useDefaultRevisionYear"; //$NON-NLS-1$
 	// disable fix up existing copyright till it works better
 //	public final static String FIX_UP_EXISTING_KEY = "org.eclipse.releng.tools.fixUpExisting"; //$NON-NLS-1$

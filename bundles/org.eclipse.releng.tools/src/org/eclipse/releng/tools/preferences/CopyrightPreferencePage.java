@@ -54,6 +54,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 	private Label fRevisionYearLabel;
 	private Text fRevisionYear;
 	private Button fUseDefaultRevisionYear;
+	private Button fUseDefaultCreationYear;
 	private Button fReplaceAllExisting;
 	// disable fix up existing copyright till it works better
 //	private Button fFixExisting;
@@ -110,7 +111,14 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		fRevisionYear = new Text(fComposite, SWT.BORDER);
 		fRevisionYear.setTextLimit(4);
 
-		// always use default revision year instead of cvs lookup
+		// always use default creation year instead of scm lookup
+		fUseDefaultCreationYear = new Button(fComposite, SWT.CHECK);
+		fUseDefaultCreationYear.setText(Messages.getString("CopyrightPreferencePage.11")); //$NON-NLS-1$
+		data = new GridData();
+		data.horizontalSpan = 2;
+		fUseDefaultCreationYear.setLayoutData(data);
+
+		// always use default revision year instead of scm lookup
 		fUseDefaultRevisionYear = new Button(fComposite, SWT.CHECK);
 		fUseDefaultRevisionYear.setText(Messages.getString("CopyrightPreferencePage.8")); //$NON-NLS-1$
 		data = new GridData();
@@ -181,8 +189,8 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		viewer.setEditable(true);
 		viewer.setDocument(document);
 		
-		// just use a default 10 lines
-		int nLines = 10;
+		// just use a default 11 lines
+		int nLines = 11;
 //		int nLines= document.getNumberOfLines();
 //		if (nLines < 5) {
 //			nLines= 5;
@@ -223,6 +231,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		fCreationYear.setText(store.getString(RelEngCopyrightConstants.CREATION_YEAR_KEY));
 		fRevisionYear.setText(store.getString(RelEngCopyrightConstants.REVISION_YEAR_KEY));
 		fUseDefaultRevisionYear.setSelection(store.getBoolean(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY));
+		fUseDefaultCreationYear.setSelection(store.getBoolean(RelEngCopyrightConstants.USE_DEFAULT_CREATION_YEAR_KEY));
 		fReplaceAllExisting.setSelection(store.getBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY));
 		fUpdateLicenseVersion.setSelection(store.getBoolean(RelEngCopyrightConstants.EPL_VERSION));
 		// disable fix up existing copyright till it works better
@@ -272,6 +281,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		fEditor.getDocument().set(store.getDefaultString(RelEngCopyrightConstants.COPYRIGHT_TEMPLATE_KEY));
 		fCreationYear.setText(store.getDefaultString(RelEngCopyrightConstants.CREATION_YEAR_KEY));
 		fRevisionYear.setText(store.getDefaultString(RelEngCopyrightConstants.REVISION_YEAR_KEY));
+		fUseDefaultCreationYear.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.USE_DEFAULT_CREATION_YEAR_KEY));
 		fUseDefaultRevisionYear.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY));
 		fReplaceAllExisting.setSelection(getPreferenceStore().getDefaultBoolean(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY));
 		// disable fix up existing copyright till it works better
@@ -291,6 +301,7 @@ public class CopyrightPreferencePage extends PreferencePage implements IWorkbenc
 		store.setValue(RelEngCopyrightConstants.COPYRIGHT_TEMPLATE_KEY, fixupLineDelimiters(fEditor.getDocument()));
 		store.setValue(RelEngCopyrightConstants.CREATION_YEAR_KEY, fCreationYear.getText());
 		store.setValue(RelEngCopyrightConstants.REVISION_YEAR_KEY, fRevisionYear.getText());
+		store.setValue(RelEngCopyrightConstants.USE_DEFAULT_CREATION_YEAR_KEY, fUseDefaultCreationYear.getSelection());
 		store.setValue(RelEngCopyrightConstants.USE_DEFAULT_REVISION_YEAR_KEY, fUseDefaultRevisionYear.getSelection());
 		store.setValue(RelEngCopyrightConstants.REPLACE_ALL_EXISTING_KEY, fReplaceAllExisting.getSelection());
 		store.setValue(RelEngCopyrightConstants.EPL_VERSION, fUpdateLicenseVersion.getSelection());
