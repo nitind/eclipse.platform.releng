@@ -161,23 +161,18 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 				String commentLinePrefix = getLinePrefix(commentStyle);
 				if (comment.regionMatches(end, fileLineDelimiter, 0, fileLineDelimiter.length())
 						&& !comment.contains("SPDX-License-Identifier")) { //$NON-NLS-1$
-					int lineStart = start;
-					String spdxIndentation = " "; //$NON-NLS-1$
-					while (lineStart > 0 && (comment.charAt(lineStart - 1) != '\n' && comment.charAt(lineStart - 1) != '\r') && Character.isWhitespace(comment.charAt(lineStart - 1))) {
-						lineStart--;
+					/* Align the SPDX license line based off of what we expect will be the first word */
+					int lineStart = comment.indexOf("Copyright"); //$NON-NLS-1$
+					StringBuilder spdxIndentation = new StringBuilder();
+					if (lineStart > 0) {
+						while (lineStart > 0
+								&& (comment.charAt(lineStart - 1) != '\n' && comment.charAt(lineStart - 1) != '\r')
+								&& Character.isWhitespace(comment.charAt(lineStart - 1))) {
+							spdxIndentation.append(comment.charAt(lineStart - 1));
+							lineStart--;
+						}
 					}
-					while (lineStart < start && !comment.regionMatches(lineStart, commentLinePrefix, 0, commentLinePrefix.length())) {
-						lineStart++;
-					}
-					/*
-					 * if the expected comment prefix is present, consider it
-					 * the point at which to measure the correct indentation
-					 */
-					if (comment.regionMatches(lineStart, commentLinePrefix, 0, commentLinePrefix.length())) {
-						lineStart += commentLinePrefix.length();
-						spdxIndentation = comment.substring(lineStart, start);
-					}
-					
+
 					comment = comment.replace(uri,
 							"https://www.eclipse.org/legal/epl-2.0/\n" + trimEnd(commentLinePrefix) + "\n" //$NON-NLS-1$ //$NON-NLS-2$
 									+ commentLinePrefix + spdxIndentation + "SPDX-License-Identifier: EPL-2.0"); //$NON-NLS-1$
