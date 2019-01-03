@@ -1,3 +1,3 @@
-This is the webtools-specific branch with the EPL v2 modification abilities. Be sure to check the **Copyright Tool** preference page for options, including how to specify which commits should not count as a modification. The EPL rewriting feature is disabled by default.
+This is the WTP-specific branch with EPL v2 rewrite. Be sure to check the **Copyright Tool** preference page for options, including how to specify which commits should not count as a modification. The EPL rewriting feature is disabled by default. Also check the console output for any files under the "Retains a reference to an outdated license, EPL v1.0" line. This will typically catch any properties file values that refer to EPL v1.0.
 
-A built version can be downloaded from https://drive.google.com/file/d/1mMlFVs7dv-VDljhL3_JbIZL7LkU89kcZ/view?usp=sharing
+A built snapshot can be downloaded from https://drive.google.com/file/d/1mMlFVs7dv-VDljhL3_JbIZL7LkU89kcZ/view?usp=sharing and added to your dropins folder for use.

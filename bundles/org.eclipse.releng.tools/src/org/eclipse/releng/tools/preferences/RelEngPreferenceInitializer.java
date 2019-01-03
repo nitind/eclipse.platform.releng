@@ -47,7 +47,7 @@ public class RelEngPreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(IPomVersionConstants.POM_VERSION_ERROR_LEVEL, IPomVersionConstants.VALUE_ERROR);
 
         store.setDefault(IGitCommitConstants.FILTER_STRINGS_KEY, "copyright, license"); //$NON-NLS-1$
-        store.setDefault(IGitCommitConstants.FILTER_STRINGSTARTS_KEY, "move bundles"); //$NON-NLS-1$
+        store.setDefault(IGitCommitConstants.FILTER_STRINGSTARTS_KEY, "move bundle, move test"); //$NON-NLS-1$
 	}
 
 }

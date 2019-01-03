@@ -181,6 +181,7 @@ public class AdvancedCopyrightComment extends CopyrightComment {
 				}
 				licenseUpdated = true;
 				comment = comment.replace("Eclipse Public License v1.0", "Eclipse Public License 2.0"); //$NON-NLS-1$//$NON-NLS-2$
+				comment = comment.replace("Eclipse License v1.0", "Eclipse Public License 2.0"); //$NON-NLS-1$//$NON-NLS-2$
 				comment = comment.replace("Eclipse Public License\n" + commentLinePrefix + " v1.0", //$NON-NLS-1$//$NON-NLS-2$
 						"Eclipse Public License\n" + commentLinePrefix + " 2.0"); //$NON-NLS-1$ //$NON-NLS-2$
 				comment = comment.replace("Eclipse Public\n" + commentLinePrefix + " License v1.0", //$NON-NLS-1$//$NON-NLS-2$
